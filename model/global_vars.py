@@ -12,7 +12,7 @@ class GV:
 
         self.T_fm = None      
         self.context = ""  
-        self.state = {}
+        self.state = {}        
 
         # Agents
         self.agents_list = []
