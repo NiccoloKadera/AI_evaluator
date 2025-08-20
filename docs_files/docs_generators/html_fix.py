@@ -11,7 +11,7 @@ def replace_links() -> None:
     print("Replacing references to _static/ with the complete URL and removing underscores...")
     
     # Base URL for static files - using GitHub Pages instead of raw.githubusercontent.com
-    static_base_url = "https://niccolokadera.github.io/AI_evaluator/docs/static/"
+    static_base_url = "https://niccolokadera.github.io/AI_evaluator/static/"
     
     # Find all HTML files in the docs directory
     html_files = glob.glob(os.path.join(docs_dir, '**/*.html'), recursive=True)

@@ -46,15 +46,15 @@ import os
 import sys
 from pathlib import Path
 
-# Percorso assoluto della directory di output
-output_path = Path(os.path.abspath('docs'))
+# # Percorso assoluto della directory di output
+# output_path = Path(os.path.abspath('docs'))
 
-# Configurazione dei percorsi di output per Sphinx
-html_baseurl = str(output_path)
-html_extra_path = []
+# # Configurazione dei percorsi di output per Sphinx
+# html_baseurl = str(output_path)
+# html_extra_path = []
 
-# Imposta la directory di output dei file di build
-html_output_dir = str(output_path)
+# # Imposta la directory di output dei file di build
+# html_output_dir = str(output_path)
 
 # Questa opzione sovrascrive il comportamento di default e mette l'output HTML nella radice di BUILDDIR
 html_file_suffix = None
