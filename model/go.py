@@ -8,9 +8,9 @@ def go(par: Par, gv: GV):
     gv.T += 1
 
     for ag in gv.agents_list:
-        # Esempio di aggiornamento dell’agente
-        ag.Action_Dict["azione_corrente"] = "esempio"
-        ag.State_Dict_Ag["ultimo_turno"] = gv.T
+        # ag.actions_dict["azione_corrente"] = "esempio"
+        # ag.states_dict["ultimo_turno"] = gv.T
+        pass
 
     if gv.T >= 100:
         gv.FLAG = False
