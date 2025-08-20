@@ -5,18 +5,21 @@ import glob
 def replace_links() -> None:
 
     # Replace references to _static/ with the complete URL in all HTML files
+    # and remove underscores from filenames
     docs_dir = os.path.abspath('../docs') if os.getcwd().endswith('docs_files') else os.path.abspath('docs')
     
-    print("Replacing references to _static/ with the complete URL...")
+    print("Replacing references to _static/ with the complete URL and removing underscores...")
     
     # Base URL for static files - using GitHub Pages instead of raw.githubusercontent.com
-    # static_base_url = "https://raw.githubusercontent.com/NiccoloKadera/AI_evaluator/raw/main/docs/_static/"
-    static_base_url = "https://raw.githubusercontent.com/NiccoloKadera/AI_evaluator/main/docs/_static/"
-    static_base_url = "https://niccolokadera.github.io/AI_evaluator/docs/_static/"
+    static_base_url = "https://niccolokadera.github.io/AI_evaluator/docs/static/"
     
     # Find all HTML files in the docs directory
     html_files = glob.glob(os.path.join(docs_dir, '**/*.html'), recursive=True)
     
+    # Dictionary to keep track of files that need their underscores removed
+    underscore_files = {}
+    
+    # Map of file references with underscores to versions without underscores
     for html_file in html_files:
         print(f"Processing file: {html_file}")
         
@@ -24,17 +27,88 @@ def replace_links() -> None:
         with open(html_file, 'r', encoding='utf-8') as f:
             content = f.read()
         
-        # Replace all occurrences of "_static/" with the complete URL
-        # Handle various common patterns in HTML files
+        # First replace _static/ with the base URL
         content = content.replace('href="_static/', f'href="{static_base_url}')
         content = content.replace('src="_static/', f'src="{static_base_url}')
         content = content.replace('url(_static/', f'url({static_base_url}')
+        
+        # Now find all references to files with underscores in the URL
+        import re
+        
+        # Pattern for finding URLs that contain underscores in the filename part
+        url_patterns = [
+            # href=".../_filename.ext"
+            r'href="([^"]*?/)?_([^/"]+)"', 
+            # src=".../_filename.ext"
+            r'src="([^"]*?/)?_([^/"]+)"',
+            # url(.../_filename.ext)
+            r'url\(([^)]*?/)?_([^/)]+)\)'
+        ]
+        
+        for pattern in url_patterns:
+            # Find all matches
+            matches = re.findall(pattern, content)
+            for match in matches:
+                path_prefix = match[0] if match[0] else ''
+                filename = match[1]
+                
+                # Create the old and new references
+                old_ref = f'{path_prefix}_' + filename
+                new_ref = f'{path_prefix}' + filename
+                
+                print(f"  - Replacing underscore in URL: {old_ref} -> {new_ref}")
+                
+                # Store the mapping
+                underscore_files[old_ref] = new_ref
+        
+        # Apply all the replacements for underscored filenames
+        for old_ref, new_ref in underscore_files.items():
+            content = content.replace(f'"{old_ref}"', f'"{new_ref}"')
+            content = content.replace(f'({old_ref})', f'({new_ref})')
         
         # Write the modified content to the file
         with open(html_file, 'w', encoding='utf-8') as f:
             f.write(content)
     
     print("Replacement completed.")
+    
+    # # Also rename the actual files/folders if they exist
+    # static_dir = os.path.join(docs_dir, 'static')
+    # if os.path.exists(static_dir) and os.path.isdir(static_dir):
+    #     print("Renaming files in static directory to remove underscores...")
+        
+    #     for root, dirs, files in os.walk(static_dir):
+    #         # Process files
+    #         for f in files:
+    #             if f.startswith('_'):
+    #                 old_file_path = os.path.join(root, f)
+    #                 new_file_name = f[1:]  # Remove leading underscore
+    #                 new_file_path = os.path.join(root, new_file_name)
+                    
+    #                 if os.path.exists(new_file_path):
+    #                     os.remove(new_file_path)  # Remove existing file if any
+                    
+    #                 shutil.move(old_file_path, new_file_path)
+    #                 print(f"  - Renamed file: {old_file_path} -> {new_file_path}")
+            
+    #         # Process directories (collect them first to avoid modifying during iteration)
+    #         dirs_to_rename = []
+    #         for d in dirs:
+    #             if d.startswith('_'):
+    #                 old_dir_path = os.path.join(root, d)
+    #                 new_dir_name = d[1:]  # Remove leading underscore
+    #                 new_dir_path = os.path.join(root, new_dir_name)
+    #                 dirs_to_rename.append((old_dir_path, new_dir_path))
+            
+    #         # Now rename the collected directories
+    #         for old_dir, new_dir in dirs_to_rename:
+    #             if os.path.exists(new_dir):
+    #                 shutil.rmtree(new_dir)  # Remove existing directory if any
+                
+    #             shutil.move(old_dir, new_dir)
+    #             print(f"  - Renamed directory: {old_dir} -> {new_dir}")
+    
+    # print("All underscores removed from static file references and actual files.")
 
 
 def moove_html_files() -> None:
