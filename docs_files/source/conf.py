@@ -32,8 +32,12 @@ exclude_patterns = []
 html_theme = "sphinx_rtd_theme"
 html_static_path = ['_static']
 
-# Imposta l'URL base per i file statici
-html_static_path_url = "https://raw.githubusercontent.com/NiccoloKadera/AI_evaluator/main/docs/_static"
+# URL base per i file statici su GitHub
+static_url_base = "https://raw.githubusercontent.com/NiccoloKadera/AI_evaluator/main/docs/_static"
+
+# Disabilita la copia dei file statici nella directory di output
+html_copy_source = False
+
 
 # -- Path setup --------------------------------------------------------------
 # Imposta percorsi per output di build
@@ -58,22 +62,6 @@ html_link_suffix = None
 
 # Override the default directory where Sphinx puts HTML output
 html_output_path = '.'
-
-# Configurazione per usare URL remoti per i file statici
-def setup(app):
-    app.add_js_file("https://raw.githubusercontent.com/NiccoloKadera/AI_evaluator/main/docs/_static/js/theme.js")
-    app.add_css_file("https://raw.githubusercontent.com/NiccoloKadera/AI_evaluator/main/docs/_static/css/theme.css")
-    return {'version': '0.1'}
-    
-# Override URLs for static files
-html_context = {
-    'css_files': [
-        'https://raw.githubusercontent.com/NiccoloKadera/AI_evaluator/main/docs/_static/css/theme.css',
-    ],
-    'script_files': [
-        'https://raw.githubusercontent.com/NiccoloKadera/AI_evaluator/main/docs/_static/js/theme.js',
-    ],
-}
 
 # Usa URL esterni per i file statici
 html_use_opensearch = ''

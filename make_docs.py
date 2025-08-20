@@ -1,5 +1,6 @@
 import os
-
+import shutil
+import glob
 from docs_files.docs_generators.syntax import build_syntax
 
 def build_docs(html=True, latex=False):
@@ -16,8 +17,7 @@ def build_docs(html=True, latex=False):
     
     # Sposta i file HTML dalla directory /docs/html direttamente a /docs
     if html:
-        import shutil
-        import glob
+        
         
         # Percorsi
         docs_dir = os.path.abspath('../docs')
@@ -42,6 +42,38 @@ def build_docs(html=True, latex=False):
             shutil.rmtree(html_dir)
             print("File spostati con successo.")
 
+    # Replace links
+    if html:
+        # Sostituisci i riferimenti a _static/ con l'URL completo in tutti i file HTML
+        docs_dir = os.path.abspath('../docs') if os.getcwd().endswith('docs_files') else os.path.abspath('docs')
+        
+        print("Sostituisco i riferimenti a _static/ con l'URL completo...")
+        
+        # URL di base per i file statici
+        static_base_url = "https://raw.githubusercontent.com/NiccoloKadera/AI_evaluator/main/docs/_static/"
+        
+        # Trova tutti i file HTML nella directory docs
+        html_files = glob.glob(os.path.join(docs_dir, '**/*.html'), recursive=True)
+        
+        for html_file in html_files:
+            print(f"Elaborazione del file: {html_file}")
+            
+            # Leggi il contenuto del file
+            with open(html_file, 'r', encoding='utf-8') as f:
+                content = f.read()
+            
+            # Sostituisci tutte le occorrenze di "_static/" con l'URL completo
+            # Gestisce diversi pattern comuni nei file HTML
+            content = content.replace('href="_static/', f'href="{static_base_url}')
+            content = content.replace('src="_static/', f'src="{static_base_url}')
+            content = content.replace('url(_static/', f'url({static_base_url}')
+            
+            # Scrivi il contenuto modificato nel file
+            with open(html_file, 'w', encoding='utf-8') as f:
+                f.write(content)
+        
+        print("Sostituzione completata.")
+    
 
 if __name__ == "__main__":
     build_docs()
