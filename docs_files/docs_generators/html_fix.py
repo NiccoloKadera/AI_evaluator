@@ -29,8 +29,11 @@ def replace_links() -> None:
         
         # First replace _static/ with the base URL
         content = content.replace('href="_static/', f'href="{static_base_url}')
+        content = content.replace('href="../_static/', f'href="{static_base_url}')
         content = content.replace('src="_static/', f'src="{static_base_url}')
+        content = content.replace('src="../_static/', f'src="{static_base_url}')
         content = content.replace('url(_static/', f'url({static_base_url}')
+        content = content.replace('url(../_static/', f'url({static_base_url}')
         
         # Now find all references to files with underscores in the URL
         import re
@@ -71,44 +74,6 @@ def replace_links() -> None:
             f.write(content)
     
     print("Replacement completed.")
-    
-    # # Also rename the actual files/folders if they exist
-    # static_dir = os.path.join(docs_dir, 'static')
-    # if os.path.exists(static_dir) and os.path.isdir(static_dir):
-    #     print("Renaming files in static directory to remove underscores...")
-        
-    #     for root, dirs, files in os.walk(static_dir):
-    #         # Process files
-    #         for f in files:
-    #             if f.startswith('_'):
-    #                 old_file_path = os.path.join(root, f)
-    #                 new_file_name = f[1:]  # Remove leading underscore
-    #                 new_file_path = os.path.join(root, new_file_name)
-                    
-    #                 if os.path.exists(new_file_path):
-    #                     os.remove(new_file_path)  # Remove existing file if any
-                    
-    #                 shutil.move(old_file_path, new_file_path)
-    #                 print(f"  - Renamed file: {old_file_path} -> {new_file_path}")
-            
-    #         # Process directories (collect them first to avoid modifying during iteration)
-    #         dirs_to_rename = []
-    #         for d in dirs:
-    #             if d.startswith('_'):
-    #                 old_dir_path = os.path.join(root, d)
-    #                 new_dir_name = d[1:]  # Remove leading underscore
-    #                 new_dir_path = os.path.join(root, new_dir_name)
-    #                 dirs_to_rename.append((old_dir_path, new_dir_path))
-            
-    #         # Now rename the collected directories
-    #         for old_dir, new_dir in dirs_to_rename:
-    #             if os.path.exists(new_dir):
-    #                 shutil.rmtree(new_dir)  # Remove existing directory if any
-                
-    #             shutil.move(old_dir, new_dir)
-    #             print(f"  - Renamed directory: {old_dir} -> {new_dir}")
-    
-    # print("All underscores removed from static file references and actual files.")
 
 
 def moove_html_files() -> None:
