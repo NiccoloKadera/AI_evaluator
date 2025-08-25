@@ -10,5 +10,14 @@ ABML_SYNTAX = {
     # Output: a = b
     "(.*?)\\s*->\\s*(.*)": "\\1 = \\2",
     
+    # Description: This is the While loop.
+    # Input: while(a < 10) -> c
+    # Output: while a < 10: c
+    "while\s*\((.*?)\)\s*->\s*(.*)": "while \1: \2",
+
+    # Description: This is the For loop.
+    # Input: for(i in range(5)) -> c
+    # Output: for i in range(5): c
+    "for\s*\((.*?)\s+in\s+(.*?)\)\s*->\s*(.*)": "for \1 in \2: \3",
 }
 
