@@ -21,3 +21,9 @@ ABML_SYNTAX = {
     "for\s*\((.*?)\s+in\s+(.*?)\)\s*->\s*(.*)": "for \1 in \2: \3",
 }
 
+ABML_TO_MERMAID = {
+    # Description: Translation of the if statement.
+    # Input: (a > b) -> c
+    # Output: Mermaid flowchart condition syntax
+    "\\((.*?)\\)\\s*->\\s*(.*)": "-:!-{\\1} -->|True| -:!!-[\"\\2\"]\n-:!- -->|False| -:!stop!-",
+}

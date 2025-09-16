@@ -1,7 +1,7 @@
 import json
 import os
 import re
-from model.ABML.syntax import ABML_SYNTAX
+from model.ABML.syntax import ABML_SYNTAX, ABML_TO_MERMAID
 
 class ABML_translation:
 
@@ -37,6 +37,33 @@ class ABML_translation:
                 py_code = py_code.replace(pattern, replacement_template)
                 
         return py_code
+    
+    def translate_to_mermaid(self, abml_code):        
+        
+        
+        mermaid_code = ''
+
+        for pattern, replacement_template in ABML_TO_MERMAID.items():
+            if "\\1" in replacement_template:  # Se il template usa riferimenti ai gruppi catturati
+                # Compila il pattern come espressione regolare
+                regex_pattern = re.compile(pattern)
+
+                # Cerca corrispondenze nel codice
+                match = regex_pattern.search(abml_code)                
+                if match:
+                    # Sostituisci con il template, mantenendo i gruppi catturati
+                    groups = match.groups()
+                    result = replacement_template
+                    for i, group in enumerate(groups):
+                        result = result.replace(f"\\{i+1}", group)
+
+                    # Sostituisci l'intera corrispondenza con il risultato
+                    mermaid_code = result
+            else:
+                # Per sostituzioni letterali semplici
+                mermaid_code = mermaid_code.replace(pattern, replacement_template)
+        
+        return mermaid_code
 
 
 

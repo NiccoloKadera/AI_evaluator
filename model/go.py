@@ -22,8 +22,7 @@ def go(par: Par, gv: GV):
 
     # Executing actions    
     
-    if par.go_set == None:
-        
+    if par.go_set == None:        
         translated_code = translator.translate_to_py(par.go_el)
         exec(translated_code, globals(), local_vars)
     else:
