@@ -24,6 +24,6 @@ ABML_SYNTAX = {
 ABML_TO_MERMAID = {
     # Description: Translation of the if statement.
     # Input: (a > b) -> c
-    # Output: Mermaid flowchart condition syntax
-    "\\((.*?)\\)\\s*->\\s*(.*)": "-:!-{\\1} -->|True| -:!!-[\"\\2\"]\n-:!- -->|False| -:!stop!-",
+    # Output: -:!-(a > b) --> |True| -:!!-[c] \n -:!- --> |False| -:!stop!-
+    "\\((.*?)\\)\\s*->\\s*(.*)": "-:!-{\\1} -->|True| -:!!-[\"\\2\"]\n-:!- -->|False| -:!!!-",
 }
